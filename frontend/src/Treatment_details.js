@@ -54,7 +54,7 @@ export default function Treatment_details() {
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const res = await axios.put(
+          await axios.put(
             "http://localhost:5000/api/user/update",
             medicalData,
             { withCredentials: true }
