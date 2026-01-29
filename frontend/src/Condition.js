@@ -39,7 +39,7 @@ export default function Condition() {
   const fetchHistory = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/predict/condition/history",
+        "https://breast-cancer-treatment-prediction.onrender.com/api/predict/condition/history",
         { withCredentials: true }
       );
       setHistory(res.data.results);
@@ -130,13 +130,12 @@ export default function Condition() {
 
           {prediction && (
             <div
-              className={`prediction-result result-text ${
-                prediction === "Improved"
+              className={`prediction-result result-text ${prediction === "Improved"
                   ? "result-improved"
                   : prediction === "Worsened"
-                  ? "result-worsened"
-                  : "result-stable"
-              }`}
+                    ? "result-worsened"
+                    : "result-stable"
+                }`}
             >
               <strong>Prediction:</strong> {prediction}
             </div>
@@ -169,9 +168,8 @@ export default function Condition() {
                       <td>{item.previous_nodes_positive}</td>
                       <td>{item.current_nodes_positive}</td>
                       <td
-                        className={`result-${
-                          item.result.toLowerCase() || "stable"
-                        }`}
+                        className={`result-${item.result.toLowerCase() || "stable"
+                          }`}
                       >
                         {item.result}
                       </td>

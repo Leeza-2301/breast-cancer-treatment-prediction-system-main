@@ -44,7 +44,7 @@ export default function Chatbot() {
                 content: m.content
             }));
 
-            const response = await axios.post('https://breast-cancer-treatment-prediction.onrender.com/chatbot/chat', {
+            const response = await axios.post('https://breast-cancer-treatment-prediction.onrender.com/api/chatbot/chat', {
                 messages: conversationHistory
             });
 
