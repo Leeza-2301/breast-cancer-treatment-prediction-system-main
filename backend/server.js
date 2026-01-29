@@ -11,7 +11,7 @@ connectDB(); // MongoDB
 app.use(express.json());
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://breast-cancer-treatment-prediction.onrender.com',
   credentials: true
 }));
 
