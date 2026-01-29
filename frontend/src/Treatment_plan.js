@@ -14,7 +14,7 @@ export default function Treatment_plan() {
       const fetchMedicalDetails = async () => {
         setIsLoading(true);
         try {
-          const response = await axios.get('http://localhost:5000/api/user/details', {
+          const response = await axios.get('https://breast-cancer-treatment-prediction.onrender.com/api/user/details', {
             withCredentials: true,
           });
           setMedicalDetails(response.data);
