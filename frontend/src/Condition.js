@@ -24,7 +24,7 @@ export default function Condition() {
     setError("");
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/predict/condition",
+        "https://breast-cancer-treatment-prediction.onrender.com/api/predict/condition",
         formData,
         { withCredentials: true }
       );
