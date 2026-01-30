@@ -16,36 +16,35 @@ const getChatResponse = async (req, res) => {
             });
         }
 
-        // System Prompt
         const systemPrompt = {
             role: "system",
             content: `You are a helpful and compassionate AI assistant for breast cancer patients.
 
-Your role:
-- Provide mental health support
-- Suggest healthy diet options
-- Recommend daily routine activities
+Your responsibilities:
+- Emotional and mental health support
+- Healthy diet suggestions
+- Daily routine guidance
 
-FORMATTING RULES:
-- DO NOT use tables
-- Use bullet points only
-- Use **bold headings**
-- Keep content mobile-friendly
-- Be gentle and supportive
+Rules:
+- No tables
+- Use bullet points
+- Use bold section titles
+- Simple mobile-friendly language
+- Be empathetic
 
-IMPORTANT:
-You are NOT a doctor.
-Do NOT give medical diagnosis or prescribe medicines.
-Always suggest consulting a healthcare professional.`
+Important:
+You are not a medical professional.
+Never give diagnosis or medication advice.
+Always suggest consulting doctors.`
         };
 
         const response = await axios.post(
             'https://openrouter.ai/api/v1/chat/completions',
             {
-                model: "meta-llama/llama-3.1-8b-instruct:free", // ✅ FIXED MODEL
+                model: "google/gemma-7b-it", // ✅ WORKING MODEL
                 messages: [systemPrompt, ...messages],
                 temperature: 0.7,
-                max_tokens: 500
+                max_tokens: 600
             },
             {
                 headers: {
@@ -57,19 +56,15 @@ Always suggest consulting a healthcare professional.`
             }
         );
 
-        return res.status(200).json({
+        res.status(200).json({
             success: true,
             reply: response.data.choices[0].message.content
         });
 
     } catch (error) {
-        console.error('OpenRouter Error:', {
-            status: error.response?.status,
-            data: error.response?.data,
-            message: error.message
-        });
+        console.error('OpenRouter Error:', error.response?.data || error.message);
 
-        return res.status(500).json({
+        res.status(500).json({
             error: 'Failed to communicate with chatbot service',
             details: error.response?.data?.error?.message || error.message
         });
