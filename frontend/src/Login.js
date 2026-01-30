@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export default function Login() {
   const [formData, setFormData] = useState({
-    name: '',
+    email: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -56,12 +56,12 @@ export default function Login() {
           {error && <div className="error-message">{error}</div>}
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="name">Username</label>
+              <label htmlFor="email">Email Address</label>
               <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 required
               />
