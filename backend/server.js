@@ -8,39 +8,37 @@ const app = express();
 connectDB(); // MongoDB
 
 // Middlewares
-app.set('trust proxy', 1); // Required for Render
 app.use(express.json());
 
 app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      'https://breast-cancer-treatment-prediction-psi.vercel.app',
-      'http://localhost:3000',
-      'http://localhost:5173'
-    ];
-    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
-      callback(null, true);
-    } else {
-      console.log('Blocked by CORS:', origin);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
   credentials: true
 }));
 
 // Session setup
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "SEC",
+    secret: process.env.SESSION_SECRET || 'SEC',
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === 'production', // true on Render, false locally
+      secure: false, // Set to true in production with HTTPS
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for Render, 'lax' locally
-    },
+    }
   })
 );
+
+// Health Check Endpoint - Test deployment
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'Server is running',
+    environment: process.env.NODE_ENV || 'development',
+    corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    mongoConnected: process.env.MONGO_URI ? 'Configured' : 'Not configured',
+    timestamp: new Date().toISOString(),
+    port: process.env.PORT || 5000
+  });
+});
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
@@ -62,4 +60,10 @@ const chatbotRoutes = require('./routes/chatbotRoutes');
 app.use('/api/chatbot', chatbotRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+module.exports = app;
