@@ -1,84 +1,89 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
-// Signup Controller
+/* ================= REGISTER ================= */
 const registerUser = async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
+  try {
+    const { name, email, password } = req.body;
 
-        // Check if user already exists
-        let user = await User.findOne({ email });
-        if (user) {
-            return res.status(400).json({ message: 'User already exists' });
-        }
-
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // Create user
-        user = new User({ name, email, password: hashedPassword });
-        await user.save();
-
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        console.error("Error in registerUser:", error); // full error log in terminal
-        res.status(500).json({
-            error: 'Server error',
-            details: error.message
-        })
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
     }
-};
 
-// Login Controller (Session-based)
-const loginUser = async (req, res) => {
-    try {
-        const { name, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Check if user exists
-        const user = await User.findOne({ name });
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
-
-        // Compare passwords
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
-
-        // Store user data in session
-        req.session.user = { userId: user._id, name: user.name };
-
-        res.json({ message: 'Login successful', userId: user._id, name: user.name });
-    } catch (error) {
-        res.status(500).json({ error: 'Server error' });
-    }
-};
-
-// Logout Controller (Destroy session)
-const logoutUser = (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            return res.status(500).json({ error: 'Logout failed' });
-        }
-        res.json({ message: 'Logout successful' });
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
     });
+
+    await user.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'User registered successfully',
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 
-// Get Logged In User (Session-based)
-const getLoggedInUser = (req, res) => {
-    if (req.session.user) {
-        res.json({ name: req.session.user.name });
-    } else {
-        res.status(401).json({ message: 'Not logged in' });
+/* ================= LOGIN ================= */
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // ❌ No session, ❌ no JWT
+    // ✅ Just return userId
+    res.json({
+      success: true,
+      message: 'Login successful',
+      userId: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 
-module.exports = { 
-    registerUser, 
-    loginUser, 
-    logoutUser,
-    getLoggedInUser
+/* ================= LOGOUT ================= */
+const logoutUser = async (req, res) => {
+  // Nothing to destroy
+  res.json({ message: 'Logout successful' });
 };
 
+/* ================= GET USER ================= */
+const getLoggedInUser = async (req, res) => {
+  try {
+    const userId = req.headers['x-user-id'];
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Not logged in' });
+    }
+
+    const user = await User.findById(userId).select('-password');
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getLoggedInUser,
+};
