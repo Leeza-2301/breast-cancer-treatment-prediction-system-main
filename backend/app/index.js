@@ -24,6 +24,7 @@ app.use(
       'https://breast-cancer-treatment-prediction-psi.vercel.app',
       'http://localhost:3000',
       'http://localhost:5173',
+      'https://breast-cancer-treatment-prediction-ten.vercel.app'
     ],
     credentials: true,
   })
