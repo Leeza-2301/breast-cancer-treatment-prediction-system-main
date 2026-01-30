@@ -16,7 +16,7 @@ const getChatResponse = async (req, res) => {
 
     try {
         const response = await axios.post("https://openrouter.ai/api/v1/chat/completions", {
-            model: "google/gemini-2.0-flash-lite-preview-02-05:free",
+            model: "mistralai/mistral-7b-instruct:free",
             messages: [systemPrompt, ...messages]
         }, {
             headers: {
@@ -35,7 +35,13 @@ const getChatResponse = async (req, res) => {
             data: error.response?.data,
             message: error.message
         });
-        res.status(500).json({ error: 'Failed to communicate with chatbot service' });
+
+        // Send specific error details to frontend for debugging
+        const upstreamError = error.response?.data?.error?.message || error.message;
+        res.status(500).json({
+            error: 'Failed to communicate with chatbot service',
+            details: upstreamError
+        });
     }
 };
 
