@@ -5,8 +5,9 @@ const connectDB = require('../config/db');
 
 const app = express();
 
-/* ---------------- DB CONNECTION (VERCEL SAFE) ---------------- */
+/* ===================== DATABASE (VERCEL SAFE) ===================== */
 let isConnected = false;
+
 const connectOnce = async () => {
   if (!isConnected) {
     await connectDB();
@@ -18,23 +19,43 @@ const connectOnce = async () => {
   await connectOnce();
 })();
 
-/* ---------------- MIDDLEWARES ---------------- */
+/* ===================== MIDDLEWARES ===================== */
 app.use(express.json());
+
+/* ===================== CORS CONFIG (FIXED) ===================== */
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'https://breast-cancer-treatment-prediction-ten.vercel.app'
+];
 
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',
-      'http://localhost:5173',
-      'https://breast-cancer-treatment-prediction-ten.vercel.app'
-    ],
+    origin: function (origin, callback) {
+      // Allow requests with no origin (Postman, mobile apps)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
-/* ---------------- ROUTES ---------------- */
+// IMPORTANT for Vercel preflight
+app.options('*', cors());
+
+/* ===================== ROUTES ===================== */
 app.get('/', (req, res) => {
-  res.json({ message: 'Backend running on Vercel 🚀' });
+  res.status(200).json({
+    success: true,
+    message: 'Backend running on Vercel 🚀',
+  });
 });
 
 app.use('/api/auth', require('../routes/authRoutes'));
@@ -44,5 +65,5 @@ app.use('/api/treatment', require('../routes/treatmentRoutes'));
 app.use('/api/treatment', require('../routes/treatmentAltRoute'));
 app.use('/api/chatbot', require('../routes/chatbotRoutes'));
 
-/* ---------------- EXPORT ---------------- */
+/* ===================== EXPORT (REQUIRED) ===================== */
 module.exports = app;
