@@ -1,9 +1,14 @@
 const express = require('express');
-const { predictCondition, getConditionHistory } = require('../controllers/predictionController');
+const controller = require('../controllers/predictionController');
 
 const router = express.Router();
 
-router.post('/condition', predictCondition);
-router.get('/condition/history', getConditionHistory);
+// Fallback if controller is not loaded correctly
+if (!controller.predictCondition || !controller.getConditionHistory) {
+    console.error("CRITICAL ERROR: Prediction Controller functions are undefined!", controller);
+}
+
+router.post('/condition', controller.predictCondition);
+router.get('/condition/history', controller.getConditionHistory);
 
 module.exports = router;
