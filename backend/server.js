@@ -12,11 +12,19 @@ app.set('trust proxy', 1); // Required for Render
 app.use(express.json());
 
 app.use(cors({
-  origin: [
-    'https://breast-cancer-treatment-prediction-psi.vercel.app',
-    'http://localhost:3000',
-    'http://localhost:5173',
-  ],
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'https://breast-cancer-treatment-prediction-psi.vercel.app',
+      'http://localhost:3000',
+      'http://localhost:5173'
+    ];
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      console.log('Blocked by CORS:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
