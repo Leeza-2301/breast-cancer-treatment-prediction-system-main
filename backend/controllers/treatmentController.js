@@ -6,7 +6,7 @@ const User = require("../models/User");
 
 const getTreatmentPlan = async (req, res) => {
     try {
-        const userId = req.session.user?.userId;
+        const userId = req.headers['x-user-id'] || req.session.user?.userId;
         if (!userId) {
             return res.status(401).json({ error: "Unauthorized. Please log in." });
         }
