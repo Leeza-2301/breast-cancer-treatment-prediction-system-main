@@ -23,10 +23,16 @@ export default function Condition() {
     e.preventDefault();
     setError("");
     try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const userId = user ? user.id : null;
+
       const res = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/predict/condition`,
         formData,
-        { withCredentials: true }
+        {
+          headers: { 'x-user-id': userId },
+          withCredentials: true
+        }
       );
       setPrediction(res.data.data.result);
       fetchHistory();
@@ -38,9 +44,15 @@ export default function Condition() {
 
   const fetchHistory = async () => {
     try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const userId = user ? user.id : null;
+
       const res = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/predict/condition/history`,
-        { withCredentials: true }
+        {
+          headers: { 'x-user-id': userId },
+          withCredentials: true
+        }
       );
       setHistory(res.data.results);
     } catch (err) {
