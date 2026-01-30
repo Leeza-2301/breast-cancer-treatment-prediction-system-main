@@ -14,14 +14,18 @@ export default function Treatment_plan() {
     const fetchMedicalDetails = async () => {
       setIsLoading(true);
       try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const userId = user ? user.id : null;
+
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/details`, {
+          headers: { 'x-user-id': userId },
           withCredentials: true,
         });
         setMedicalDetails(response.data);
         setError(null);
+        // ... existing code ...
       } catch (error) {
-        console.error('Error fetching medical details:', error);
-        setError('Failed to load medical details.');
+        // ... existing code ...
       } finally {
         setIsLoading(false);
       }
@@ -33,10 +37,16 @@ export default function Treatment_plan() {
   const predictTreatment = async () => {
     try {
       setIsLoading(true);
+      const user = JSON.parse(localStorage.getItem('user'));
+      const userId = user ? user.id : null;
+
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/treatment/predict`,
         {},
-        { withCredentials: true }
+        {
+          headers: { 'x-user-id': userId },
+          withCredentials: true
+        }
       );
       setTreatmentPlan(response.data);
       setShowPrediction(true);
