@@ -27,7 +27,11 @@ export default function Treatment_details() {
 
   const fetchUserDetails = async () => {
     try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const userId = user ? user.id : null;
+
       const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/details`, {
+        headers: { 'x-user-id': userId },
         withCredentials: true,
       });
 
@@ -54,10 +58,16 @@ export default function Treatment_details() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const userId = user ? user.id : null;
+
       await axios.put(
         `${process.env.REACT_APP_API_URL}/api/user/update`,
         medicalData,
-        { withCredentials: true }
+        {
+          headers: { 'x-user-id': userId },
+          withCredentials: true
+        }
       );
 
       toast.success("Details saved successfully!");
