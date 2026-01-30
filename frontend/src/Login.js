@@ -82,7 +82,7 @@ export default function Login() {
             </button>
           </form>
           <p className="register-link">
-            Don't have an account? <a href="/signup">Register here</a>
+            Don't have an account? <a href="/signup">Register Here</a>
           </p>
         </div>
       </div>
