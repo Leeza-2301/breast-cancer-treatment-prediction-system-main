@@ -28,7 +28,11 @@ export default function Header() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const userId = user ? user.id : null;
+
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/me`, {
+          headers: { 'x-user-id': userId },
           withCredentials: true, // required to send cookies
         });
         setUsername(response.data.name || 'User');
@@ -43,7 +47,11 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const userId = user ? user.id : null;
+
       await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/logout`, {}, {
+        headers: { 'x-user-id': userId },
         withCredentials: true,
       });
       setUsername('Guest');
