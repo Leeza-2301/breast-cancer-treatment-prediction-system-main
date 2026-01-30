@@ -13,7 +13,10 @@ const connectOnce = async () => {
     isConnected = true;
   }
 };
-connectOnce();
+
+(async () => {
+  await connectOnce();
+})();
 
 /* ---------------- MIDDLEWARES ---------------- */
 app.use(express.json());
@@ -21,7 +24,6 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
-      'https://breast-cancer-treatment-prediction-psi.vercel.app',
       'http://localhost:3000',
       'http://localhost:5173',
       'https://breast-cancer-treatment-prediction-ten.vercel.app'
@@ -30,7 +32,7 @@ app.use(
   })
 );
 
-/* ---------------- ROUTES ----------------️---------------- */
+/* ---------------- ROUTES ---------------- */
 app.get('/', (req, res) => {
   res.json({ message: 'Backend running on Vercel 🚀' });
 });
@@ -42,5 +44,5 @@ app.use('/api/treatment', require('../routes/treatmentRoutes'));
 app.use('/api/treatment', require('../routes/treatmentAltRoute'));
 app.use('/api/chatbot', require('../routes/chatbotRoutes'));
 
-/* ---------------- EXPORT (IMPORTANT) ---------------- */
+/* ---------------- EXPORT ---------------- */
 module.exports = app;
