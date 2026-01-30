@@ -34,7 +34,16 @@ export default function Alternative_treatment() {
     fetchMedicalDetails();
   }, []);
 
-  // ...
+  const formatKey = (key) => key.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+  const formatValue = (value) =>
+    typeof value === "string" && ["no", "nan", "NaN"].includes(value.toLowerCase())
+      ? "Not Required"
+      : value;
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const predictAlternative = async () => {
     setLoading(true); // 👈 Start loader
