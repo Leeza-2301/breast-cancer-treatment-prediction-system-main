@@ -17,7 +17,11 @@ export default function Alternative_treatment() {
   useEffect(() => {
     const fetchMedicalDetails = async () => {
       try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const userId = user ? user.id : null;
+
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/details`, {
+          headers: { 'x-user-id': userId },
           withCredentials: true,
         });
         setMedicalDetails(response.data.user || response.data);
@@ -30,25 +34,22 @@ export default function Alternative_treatment() {
     fetchMedicalDetails();
   }, []);
 
-  const formatKey = (key) => key.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-
-  const formatValue = (value) =>
-    typeof value === "string" && ["no", "nan", "NaN"].includes(value.toLowerCase())
-      ? "Not Required"
-      : value;
-
-  const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  // ...
 
   const predictAlternative = async () => {
     setLoading(true); // 👈 Start loader
     setPrediction(null);
     try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const userId = user ? user.id : null;
+
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/treatment/predict-alternative-treatment`,
         formData,
-        { withCredentials: true }
+        {
+          headers: { 'x-user-id': userId },
+          withCredentials: true
+        }
       );
       setPrediction(response.data.prediction);
       setError(null);
