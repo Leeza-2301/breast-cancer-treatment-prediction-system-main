@@ -5,7 +5,7 @@ const updateUserDetails = async (req, res) => {
     try {
         console.log("Session User:", req.session);
 
-        const userId = req.session.user?.userId;
+        const userId = req.headers['x-user-id'] || req.session.user?.userId;
         if (!userId) {
             return res.status(401).json({ message: "Unauthorized" });
         }
@@ -33,7 +33,7 @@ const updateUserDetails = async (req, res) => {
 // Get current user details
 const getUserDetails = async (req, res) => {
     try {
-        const userId = req.session.user?.userId;
+        const userId = req.headers['x-user-id'] || req.session.user?.userId;
         if (!userId) {
             return res.status(401).json({ message: "Unauthorized. Please log in." });
         }
