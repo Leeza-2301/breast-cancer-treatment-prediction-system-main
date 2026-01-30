@@ -16,20 +16,25 @@ const getChatResponse = async (req, res) => {
 
     try {
         const response = await axios.post("https://openrouter.ai/api/v1/chat/completions", {
-            model: "gpt-oss-20b:free",
+            model: "google/gemini-2.0-flash-lite-preview-02-05:free",
             messages: [systemPrompt, ...messages]
         }, {
             headers: {
                 "Authorization": `Bearer ${apiKey}`,
                 "Content-Type": "application/json",
-                "HTTP-Referer": "http://localhost:3000",
+                "HTTP-Referer": "https://breast-cancer-treat.vercel.app/",
                 "X-Title": "Br.Care Chatbot"
             }
         });
 
         res.json(response.data);
     } catch (error) {
-        console.error("Error calling OpenRouter:", error.response?.data || error.message);
+        console.error("OpenRouter Error Details:", {
+            status: error.response?.status,
+            statusText: error.response?.statusText,
+            data: error.response?.data,
+            message: error.message
+        });
         res.status(500).json({ error: 'Failed to communicate with chatbot service' });
     }
 };
