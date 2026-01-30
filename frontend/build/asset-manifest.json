@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.dbadd33f.css",
-    "main.js": "/static/js/main.d3740762.js",
+    "main.css": "/static/css/main.20f18fea.css",
+    "main.js": "/static/js/main.3ab2abe5.js",
     "static/js/453.8ab44547.chunk.js": "/static/js/453.8ab44547.chunk.js",
     "static/media/bcs-landing-ic3.png": "/static/media/bcs-landing-ic3.09bcfc9a644caf106129.png",
     "static/media/person 3.jpg": "/static/media/person 3.2fc8c189992f6fdad7d8.jpg",
@@ -15,12 +15,12 @@
     "static/media/person 2.jpg": "/static/media/person 2.700ec7fa62cb8377ec76.jpg",
     "static/media/person1.jpg": "/static/media/person1.a2f29b9cdc0baedb0108.jpg",
     "index.html": "/index.html",
-    "main.dbadd33f.css.map": "/static/css/main.dbadd33f.css.map",
-    "main.d3740762.js.map": "/static/js/main.d3740762.js.map",
+    "main.20f18fea.css.map": "/static/css/main.20f18fea.css.map",
+    "main.3ab2abe5.js.map": "/static/js/main.3ab2abe5.js.map",
     "453.8ab44547.chunk.js.map": "/static/js/453.8ab44547.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.dbadd33f.css",
-    "static/js/main.d3740762.js"
+    "static/css/main.20f18fea.css",
+    "static/js/main.3ab2abe5.js"
   ]
 }

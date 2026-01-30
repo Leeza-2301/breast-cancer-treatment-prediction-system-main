@@ -25,7 +25,7 @@ export default function Login() {
     setError('');
 
     try {
-      const response = await axios.post('https://breast-cancer-treatment-prediction.onrender.com/api/auth/login', formData, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -34,7 +34,7 @@ export default function Login() {
 
       console.log('Login successful:', response.data);
 
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('user', JSON.stringify({ name: response.data.name, id: response.data.userId }));
       localStorage.setItem('token', response.data.token);
       window.location.href = '/Home';
     } catch (err) {

@@ -14,7 +14,7 @@ export default function Treatment_plan() {
     const fetchMedicalDetails = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get('https://breast-cancer-treatment-prediction.onrender.com/api/user/details', {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/details`, {
           withCredentials: true,
         });
         setMedicalDetails(response.data);
@@ -34,7 +34,7 @@ export default function Treatment_plan() {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        'https://breast-cancer-treatment-prediction.onrender.com/api/treatment/predict',
+        `${process.env.REACT_APP_API_URL}/api/treatment/predict`,
         {},
         { withCredentials: true }
       );

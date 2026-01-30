@@ -8,13 +8,14 @@ const app = express();
 connectDB(); // MongoDB
 
 // Middlewares
+app.set('trust proxy', 1); // Required for Render
 app.use(express.json());
 
 app.use(cors({
   origin: [
     'https://breast-cancer-treatment-prediction-psi.vercel.app',
     'http://localhost:3000',
-    'http://localhost:5173'
+    'http://localhost:5173',
   ],
   credentials: true
 }));
@@ -22,13 +23,14 @@ app.use(cors({
 // Session setup
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'SEC',
+    secret: process.env.SESSION_SECRET || "SEC",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // Set to true in production with HTTPS
+      secure: process.env.NODE_ENV === 'production', // true on Render, false locally
       httpOnly: true,
-    }
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for Render, 'lax' locally
+    },
   })
 );
 

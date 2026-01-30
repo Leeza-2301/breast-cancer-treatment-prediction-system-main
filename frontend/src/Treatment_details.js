@@ -27,7 +27,7 @@ export default function Treatment_details() {
 
   const fetchUserDetails = async () => {
     try {
-      const res = await axios.get("https://breast-cancer-treatment-prediction.onrender.com/api/user/details", {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/details`, {
         withCredentials: true,
       });
 
@@ -55,7 +55,7 @@ export default function Treatment_details() {
     e.preventDefault();
     try {
       await axios.put(
-        "https://breast-cancer-treatment-prediction.onrender.com/api/user/update",
+        `${process.env.REACT_APP_API_URL}/api/user/update`,
         medicalData,
         { withCredentials: true }
       );

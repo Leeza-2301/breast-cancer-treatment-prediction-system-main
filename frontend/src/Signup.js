@@ -5,7 +5,7 @@ import "bootstrap"
 import axios from 'axios';
 
 export default function Signup() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,46 +28,46 @@ export default function Signup() {
       setError('All fields are required');
       return false;
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return false;
     }
-    
+
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address');
       return false;
     }
-    
+
     // Password strength check
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters long');
       return false;
     }
-    
+
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     if (!validateForm()) return;
-    
+
     setIsLoading(true);
-    
+
     try {
       // Connect to your backend API for registration
-      const response = await axios.post('https://breast-cancer-treatment-prediction.onrender.com/api/auth/signup', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/signup`, {
         name: formData.name,
         email: formData.email,
         password: formData.password
       });
-      
+
       setIsLoading(false);
-      
+
       if (response.data && response.data.message === 'User registered successfully') {
         // Registration successful, redirect to login
         navigate('/Login', { state: { message: 'Registration successful! Please log in.' } });
@@ -86,16 +86,16 @@ export default function Signup() {
 
   return (
     <div className="signup-container">
-      
+
       <div className="right-section">
         <div className="signup-form-container">
           <div className="signup-header">
             <h2>Create an Account</h2>
             <p>Register to get started</p>
           </div>
-          
+
           {error && <div className="error-message">{error}</div>}
-          
+
           <form onSubmit={handleSubmit} className="signup-form">
             <div className="form-group">
               <label htmlFor="name">Full Name</label>
@@ -109,7 +109,7 @@ export default function Signup() {
                 required
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="email">Email Address</label>
               <input
@@ -122,7 +122,7 @@ export default function Signup() {
                 required
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <input
@@ -135,7 +135,7 @@ export default function Signup() {
                 required
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="confirmPassword">Confirm Password</label>
               <input
@@ -148,12 +148,12 @@ export default function Signup() {
                 required
               />
             </div>
-            
+
             <button type="submit" className="signup-button" disabled={isLoading}>
               {isLoading ? 'Creating Account...' : 'Sign Up'}
             </button>
           </form>
-          
+
           <div className="signup-footer">
             <p>Already have an account? <Link to="/Login" className="login-link">Log In</Link></p>
           </div>

@@ -24,7 +24,7 @@ export default function Condition() {
     setError("");
     try {
       const res = await axios.post(
-        "https://breast-cancer-treatment-prediction.onrender.com/api/predict/condition",
+        `${process.env.REACT_APP_API_URL}/api/predict/condition`,
         formData,
         { withCredentials: true }
       );
@@ -39,7 +39,7 @@ export default function Condition() {
   const fetchHistory = async () => {
     try {
       const res = await axios.get(
-        "https://breast-cancer-treatment-prediction.onrender.com/api/predict/condition/history",
+        `${process.env.REACT_APP_API_URL}/api/predict/condition/history`,
         { withCredentials: true }
       );
       setHistory(res.data.results);
@@ -131,10 +131,10 @@ export default function Condition() {
           {prediction && (
             <div
               className={`prediction-result result-text ${prediction === "Improved"
-                  ? "result-improved"
-                  : prediction === "Worsened"
-                    ? "result-worsened"
-                    : "result-stable"
+                ? "result-improved"
+                : prediction === "Worsened"
+                  ? "result-worsened"
+                  : "result-stable"
                 }`}
             >
               <strong>Prediction:</strong> {prediction}

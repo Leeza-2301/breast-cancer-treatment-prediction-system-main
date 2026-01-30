@@ -28,7 +28,7 @@ export default function Header() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/auth/me', {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/me`, {
           withCredentials: true, // required to send cookies
         });
         setUsername(response.data.name || 'User');
@@ -43,7 +43,7 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:5000/api/auth/logout', {}, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/logout`, {}, {
         withCredentials: true,
       });
       setUsername('Guest');
@@ -80,7 +80,7 @@ export default function Header() {
 
       <div className="user-account">
         <div className="user-dropdown">
-          <button 
+          <button
             className="user-btn"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >

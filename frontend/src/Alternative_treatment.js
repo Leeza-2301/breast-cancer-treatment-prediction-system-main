@@ -17,7 +17,7 @@ export default function Alternative_treatment() {
   useEffect(() => {
     const fetchMedicalDetails = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/user/details", {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/details`, {
           withCredentials: true,
         });
         setMedicalDetails(response.data.user || response.data);
@@ -46,7 +46,7 @@ export default function Alternative_treatment() {
     setPrediction(null);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/treatment/predict-alternative-treatment",
+        `${process.env.REACT_APP_API_URL}/api/treatment/predict-alternative-treatment`,
         formData,
         { withCredentials: true }
       );
