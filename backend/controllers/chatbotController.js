@@ -3,7 +3,7 @@ const { GoogleGenAI } = require("@google/genai");
 const getChatResponse = async (req, res) => {
     try {
         const { messages } = req.body;
-        const apiKey = process.env.OPENROUTER_API_KEY;
+        const apiKey = process.env.GEMINI_API_KEY;
 
         if (!apiKey) {
             return res.status(500).json({ error: 'Gemini API key not configured' });
